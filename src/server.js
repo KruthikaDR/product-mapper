@@ -128,13 +128,16 @@ app.post('/api/mappings', async (req, res) => {
 
 app.get('/api/mappings', async (req, res) => {
     try {
+        console.log('Fetching all mappings...');
         const mappings = await Product.find();
+        console.log(`Found ${mappings.length} mappings`);
         res.json(mappings);
     } catch (error) {
-        res.json({
+        console.error('Error fetching mappings:', error);
+        res.status(500).json({
             status: "Error",
-            message: error.message || "Error fetching mappings",
-            found: false
+            message: "Failed to fetch mappings",
+            error: error.message
         });
     }
 });

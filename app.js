@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://product-mapper.onrender.com'; // Replace with your actual Render URL
+const API_BASE_URL = 'https://product-mapper-8s34.onrender.com'; // Updated Render URL
 
 document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
@@ -146,8 +146,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadMappings() {
         try {
+            console.log('Fetching mappings from:', `${API_BASE_URL}/api/mappings`);
             const response = await fetch(`${API_BASE_URL}/api/mappings`);
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
             const mappings = await response.json();
+            console.log('Received mappings:', mappings);
             
             if (Array.isArray(mappings)) {
                 mappingsList.innerHTML = mappings.map(mapping => `
@@ -159,12 +166,15 @@ document.addEventListener('DOMContentLoaded', () => {
                         <button class="delete-btn" onclick="deleteMapping('${mapping._id}')">Delete</button>
                     </div>
                 `).join('');
+            } else if (mappings.status === "Error") {
+                console.error('Server error:', mappings.message);
+                mappingsList.innerHTML = `<p class="error">Error: ${mappings.message}</p>`;
             } else {
                 mappingsList.innerHTML = '<p>No mappings found</p>';
             }
         } catch (error) {
-            console.error('Error:', error);
-            mappingsList.innerHTML = '<p>Error loading mappings</p>';
+            console.error('Error loading mappings:', error);
+            mappingsList.innerHTML = `<p class="error">Error loading mappings: ${error.message}</p>`;
         }
     }
 });
