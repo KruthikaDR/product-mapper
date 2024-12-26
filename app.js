@@ -1,3 +1,5 @@
+const API_BASE_URL = 'YOUR_DEPLOYED_BACKEND_URL'; // Replace with your actual backend URL
+
 document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');
     const searchButton = document.getElementById('searchButton');
@@ -41,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             showResult({ status: "Loading", message: "Searching..." });
             
-            const response = await fetch(`/api/search/${encodeURIComponent(searchTerm)}`);
+            const response = await fetch(`${API_BASE_URL}/api/search?term=${encodeURIComponent(searchTerm)}`);
             const data = await response.json();
             
             showResult(data, searchTerm);
@@ -113,7 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const response = await fetch('/api/mappings', {
+            const response = await fetch(`${API_BASE_URL}/api/mappings`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ supplierName, standardName })
@@ -144,7 +146,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     async function loadMappings() {
         try {
-            const response = await fetch('/api/mappings');
+            const response = await fetch(`${API_BASE_URL}/api/mappings`);
             const mappings = await response.json();
             
             if (Array.isArray(mappings)) {
@@ -173,7 +175,7 @@ async function deleteMapping(id) {
     }
 
     try {
-        const response = await fetch(`/api/mappings/${id}`, {
+        const response = await fetch(`${API_BASE_URL}/api/mappings/${id}`, {
             method: 'DELETE'
         });
         
@@ -182,7 +184,7 @@ async function deleteMapping(id) {
         if (data.status === "Success") {
             // Refresh the mappings list
             const mappingsList = document.getElementById('mappingsList');
-            const response = await fetch('/api/mappings');
+            const response = await fetch(`${API_BASE_URL}/api/mappings`);
             const mappings = await response.json();
             
             if (Array.isArray(mappings)) {
