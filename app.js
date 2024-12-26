@@ -1,4 +1,4 @@
-const API_BASE_URL = 'YOUR_DEPLOYED_BACKEND_URL'; // Replace with your actual backend URL
+const API_BASE_URL = 'https://product-mapper.onrender.com'; // Replace with your actual Render URL
 
 document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('searchInput');

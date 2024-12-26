@@ -8,7 +8,11 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: ['https://kruthikadr.github.io', 'http://localhost:3000'],
+    methods: ['GET', 'POST', 'DELETE'],
+    credentials: true
+}));
 app.use(express.json());
 
 // Serve static files from the root directory
@@ -28,10 +32,10 @@ const productSchema = new mongoose.Schema({
 const Product = mongoose.model('Product', productSchema);
 
 // API Routes
-app.get('/api/search/:name', async (req, res) => {
+app.get('/api/search', async (req, res) => {
     try {
-        console.log('Search request received for:', req.params.name);
-        const searchTerm = req.params.name;
+        console.log('Search request received for:', req.query.term);
+        const searchTerm = req.query.term;
         
         if (!searchTerm) {
             console.log('Empty search term');
